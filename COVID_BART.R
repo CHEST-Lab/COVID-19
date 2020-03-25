@@ -30,7 +30,7 @@ print(varselect$important_vars_local_names)
 print(varselect$important_vars_global_max_names)
 print(varselect$important_vars_global_se_names) 
 
-X2 <- subset(Xa, select=c(tot_P, tot_R, S_109, Rskh_k2, Rskh_pp, RmSh_k2, S_078, S_018, S_030, S_176, Rjw_km2, RmSh_pp, Rhn_km2, S_113, S_075, RchE_k2, S_044, Rta_km2, sch_km2, ff_km2, Rtao_pp, cc_km2, S_159, Rch_pop, S_095, S_124))
+X2 <- subset(Xa, select=c(tot_P, tot_R, S_109, Rskh_k2, Rskh_pp, RmSh_k2, S_078, S_018, S_030, S_176, Rjw_km2, RmSh_pp, Rhn_km2, S_113, S_075, RchE_k2, S_044, Rta_km2, sch_km2, ff_km2, Rtao_pp, cc_km2, S_159, Rch_pop, S_095, S_124, EWZ))
 #BARTmachine with selected variables, built using CV parameterisation
 
 bm_cv <- bartMachineCV(X=X2, y=y)

@@ -14,20 +14,30 @@ setwd("D:/SARS-CoV-2/MasterFile")
 #Read shapefile
 shp <- readOGR(dsn="D:/SARS-CoV-2/MasterFile/RKI_with_All.shp")
 #shpdf <- data.frame(shp)
-#Read DBF
+#Read data
 d <- read.dbf("RKI_with_All.dbf")
+
+#independent variable: crude incidence rate
+  d$y <- log2(d$cs__100)
+#Change negative infinite values to 0
+d$y[mapply(is.infinite, d$y)] <- 0
+#Select independent variables
+d <- d[c(29,48:317)]
+#Remove unwanted variables
+d <- subset(Xa, select=-c(S_LK))
+#Check for factors, due to decimal-comma conversion
+names(Filter(is.factor, d))
 
 #Map case counts
 tm_shape(shp) + tm_polygons(col="cases", title="Cumulative incidence, 23.03", breaks=c(0,2,5,10,20,50,100,500,750,1000,1500,2000), palette="Greys") + tm_layout(inner.margins=0.03, legend.outside = T, bg.color = "white")
 
 #Poisson Model
-m <- glm(cases ~ as.numeric(S_066) + M_pop + uni_km2,
-          family=poisson(link="log"), 
+m <- lmer(y ~ S_117 + S_051 + S_119 + S_108 + S_125 + S_004 + hair_pp + S_153 + cc_km2 + nigh_pp + EWZ + S_022 + S_130 + S_104 + S_011 + sch_pop + S_142 + S_054 + ff_pop + (1|S_109), 
           data=d, na.action = na.omit)
 tab_model(m, show.se=T, show.std=T, p.style = "a", show.r2 = F, col.order = c("est", "se", "ci", "std.est", "std.se"))
 
-#Compute pseudo R^2 measure
-pseudoR2 = 1-(m$deviance/m$null.deviance)
+#Compute pseudo R^2 measure for poisson models
+#pseudoR2 = 1-(m$deviance/m$null.deviance)
 
 #Post-hoc evaluation
 #Response residuals - variance should increase with fitted value
