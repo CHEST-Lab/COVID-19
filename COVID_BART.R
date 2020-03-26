@@ -39,9 +39,12 @@ X <- Xa[c(25,34,40:363)]
 rm(Xa)
 #Remove unwanted variables
 X$S_109 <- as.factor(X$S_109)
-rm(Xb)
 #Check for factors
 names(Filter(is.factor, X))
+
+plot(X$EWZ,shp$cs__100, xlim=c(3000,600000), ylim=c(0,100))
+mx <- lm(shp$cs__100 ~ X$EWZ)
+summary(mx)
 
 #Map case counts
 #tm_shape(shp) + tm_polygons(col="y", title="Cumulative incidence (log2), 25.03", breaks=c(0,1,2,3,4,5,6,7,8,9,10), palette="Greys") + tm_layout(inner.margins=0.03, legend.outside = T, bg.color = "white")
